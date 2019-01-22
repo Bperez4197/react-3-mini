@@ -29,7 +29,12 @@ class App extends Component {
   }
 
   getVehicles() {
-    // axios (GET)
+    axios.get('http://joes-autos.herokuapp.com/api/vehicles').then( results => {
+      toast.success('Successfully got Vehicles.');
+      this.setState({
+        vehiclesToDisplay:  results.data
+      });
+    }).catch( () => toast.error('Failed at fetching Vehicles'));
     // setState with response -> vehiclesToDisplay
   }
 
@@ -39,7 +44,11 @@ class App extends Component {
   }
 
   sellCar(id) {
-    // axios (DELETE)
+    axios.delete(`http://joes-autos.herokuapp.com/api/vehicles/${id}`).then(results => {
+      this.setState({
+        vehiclesToDisplay: results.data.vehicles
+      })
+    })
     // setState with response -> vehiclesToDisplay
   }
 
@@ -58,7 +67,13 @@ class App extends Component {
   }
 
   updatePrice(priceChange, id) {
-    // axios (PUT)
+    axios.put(`http://joes-autos.herokuapp.com/api/vehicles/${id}/${priceChange}`).then((results) => {
+      toast.success('Price was updated successfully!');
+      this.setState({
+        'vehiclesToDisplay': results.data.vehicles
+
+      })
+    }).catch( () => toast.error('Error updating price '));
     // setState with response -> vehiclesToDisplay
   }
 
@@ -70,9 +85,10 @@ class App extends Component {
       year: this.year.value,
       price: this.price.value
     };
-
-    // axios (POST)
-    // setState with response -> vehiclesToDisplay
+    axios.post('https://joes-autos.herokuapp.com/api/vehicles', newCar).then( results => {
+      toast.success("Successfully added vehicle.");
+      this.setState({ vehiclesToDisplay: results.data.vehicles });
+    }).catch( () => toast.error('Failed at adding new vehicle.') );
   }
 
   addBuyer() {
@@ -82,7 +98,12 @@ class App extends Component {
       address: this.address.value
     };
 
-    //axios (POST)
+    axios.post('http://joes-autos.herokuapp.com/api/buyers' , newBuyer ).then( (response) => {
+      console.log(response.data);
+      this.setState({
+        buyersToDisplay: response.data.buyers
+      })
+    })
     // setState with response -> buyersToDisplay
   }
 
